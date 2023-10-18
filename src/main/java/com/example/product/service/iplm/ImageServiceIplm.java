@@ -10,7 +10,6 @@ import com.example.product.repository.ProductRepository;
 import com.example.product.service.ImageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -47,7 +46,7 @@ public class ImageServiceIplm implements ImageService {
 
     @Override
     public List<ImageDto> getAllImagesByProductId(Long productId) {
-        List<Image> images = imageRepository.findByProductId(productId);
+        List<Image> images = imageRepository.findImageByProductId(productId);
         List<Image> sortedImages = images.stream()
                 .sorted(Comparator.comparing(Image::getId))
                 .toList();

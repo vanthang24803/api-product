@@ -21,7 +21,7 @@ public class ProductController {
     }
 
     @GetMapping("products")
-    public ResponseEntity<ProductResponse> getAllPokemons(
+    public ResponseEntity<ProductResponse> getAllProducts(
             @RequestParam(value = "numberPage", defaultValue = "0", required = false) int numberPage,
             @RequestParam(value = "sizePage", defaultValue = "10", required = false) int sizePage
     ) {

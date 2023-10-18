@@ -3,9 +3,11 @@ package com.example.product.service.iplm;
 import com.example.product.dto.ImageDto;
 import com.example.product.dto.ProductDto;
 import com.example.product.dto.ProductResponse;
+import com.example.product.dto.ReviewDto;
 import com.example.product.exceptions.ProductNotFoundException;
 import com.example.product.models.Image;
 import com.example.product.models.Product;
+import com.example.product.models.Review;
 import com.example.product.repository.*;
 import com.example.product.service.ProductService;
 import org.modelmapper.ModelMapper;
@@ -63,9 +65,15 @@ public class ProductServiceIplm implements ProductService {
 
         List<ProductDto> content = listOfProducts.stream().map(product -> {
             ProductDto productDto = mapToProductDto(product);
-            List<Image> images = imageRepository.findByProductId(product.getId());
-            List<ImageDto> imageDtos = images.stream().map(this::mapToImageDto).collect(Collectors.toList());
-            productDto.setImageUrls(imageDtos);
+
+            List<Image> images = imageRepository.findImageByProductId(product.getId());
+            List<ImageDto> listImage = images.stream().map(this::mapToImageDto).toList();
+            productDto.setImageUrls(listImage);
+
+            List<Review> reviews = reviewRepository.findReviewsByProductId(product.getId());
+            List<ReviewDto> listReview = reviews.stream().map(this::mapToReviewDto).toList();
+            productDto.setReviews(listReview);
+
             return productDto;
         }).collect(Collectors.toList());
 
@@ -135,5 +143,13 @@ public class ProductServiceIplm implements ProductService {
 
     private Image mapToImageEntity(ImageDto imageDto) {
         return modelMapper.map(imageDto, Image.class);
+    }
+
+    private ReviewDto mapToReviewDto(Review review) {
+        return modelMapper.map(review, ReviewDto.class);
+    }
+
+    private Review mapToReviewEntity(ReviewDto reviewDto) {
+        return modelMapper.map(reviewDto, Review.class);
     }
 }
