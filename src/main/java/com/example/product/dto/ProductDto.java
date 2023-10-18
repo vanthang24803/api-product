@@ -2,6 +2,7 @@ package com.example.product.dto;
 
 import com.example.product.models.ECategorize;
 import com.example.product.models.ESize;
+import com.example.product.models.Image;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class ProductDto {
 
     private ECategorize categorize;
     private  List<ESize> sizes;
-    private  List<String> imageUrls;
+    private  List<ImageDto> imageUrls;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createAt;

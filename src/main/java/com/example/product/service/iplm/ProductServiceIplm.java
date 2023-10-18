@@ -1,8 +1,10 @@
 package com.example.product.service.iplm;
 
+import com.example.product.dto.ImageDto;
 import com.example.product.dto.ProductDto;
 import com.example.product.dto.ProductResponse;
 import com.example.product.exceptions.ProductNotFoundException;
+import com.example.product.models.Image;
 import com.example.product.models.Product;
 import com.example.product.repository.*;
 import com.example.product.service.ProductService;
@@ -25,6 +27,7 @@ public class ProductServiceIplm implements ProductService {
     private final ImageRepository imageRepository;
     private final CategorizeRepository categorizeRepository;
     private final SizeRepository sizeRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ProductServiceIplm(ProductRepository productRepository, ReviewRepository reviewRepository,
@@ -39,7 +42,6 @@ public class ProductServiceIplm implements ProductService {
         this.modelMapper = modelMapper;
     }
 
-    private final ModelMapper modelMapper;
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -61,7 +63,9 @@ public class ProductServiceIplm implements ProductService {
 
         List<ProductDto> content = listOfProducts.stream().map(product -> {
             ProductDto productDto = mapToProductDto(product);
-
+            List<Image> images = imageRepository.findByProductId(product.getId());
+            List<ImageDto> imageDtos = images.stream().map(this::mapToImageDto).collect(Collectors.toList());
+            productDto.setImageUrls(imageDtos);
             return productDto;
         }).collect(Collectors.toList());
 
@@ -125,4 +129,11 @@ public class ProductServiceIplm implements ProductService {
         return modelMapper.map(productDto, Product.class);
     }
 
+    private ImageDto mapToImageDto(Image image) {
+        return modelMapper.map(image, ImageDto.class);
+    }
+
+    private Image mapToImageEntity(ImageDto imageDto) {
+        return modelMapper.map(imageDto, Image.class);
+    }
 }

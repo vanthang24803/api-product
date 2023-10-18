@@ -26,10 +26,10 @@ public class Product {
     private Double price = 0.00;
 
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images = new ArrayList<Image>();
 
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private  List<Review> reviews = new ArrayList<>();
+    private  List<Review> reviews = new ArrayList<Review>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
